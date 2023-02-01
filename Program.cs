@@ -15,6 +15,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 
 builder.Services.AddControllers();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build();
 
 

@@ -1,4 +1,6 @@
-﻿using EF_SQL_Server.DB_Context;
+﻿using AutoMapper;
+using EF_SQL_Server.DB_Context;
+using EF_SQL_Server.DTO;
 using EF_SQL_Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +14,14 @@ namespace EF_SQL_Server.Controllers
     {
         // INYECCION DE DEPENDENCIAS
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public NarutoController(ApplicationDbContext context)
+        public NarutoController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
+
         [HttpGet]
         public async Task<ActionResult<List<Naruto>>> GetAll()
         {
@@ -30,8 +35,9 @@ namespace EF_SQL_Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Naruto naruto)
+        public async Task<ActionResult> Post([FromBody] Naruto_DTO narutoDTO)
         {
+            var naruto = mapper.Map<Naruto>(narutoDTO);
             context.Add(naruto);
             await context.SaveChangesAsync();
             return Ok();
